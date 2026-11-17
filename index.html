@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mark the Artist · The Workshop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f6f1e7; --ink:#1f1b16; --muted:#7a6f62; --line:#e3d9c7; --card:#fffdf8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,system-ui,sans-serif;
+    background-image:radial-gradient(circle at 15% 0%, #f9d9b844 0, transparent 40%),radial-gradient(circle at 100% 20%, #c9e4de55 0, transparent 35%);}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 20px 80px}
+  header{text-align:center;margin-bottom:28px}
+  .eyebrow{letter-spacing:.22em;text-transform:uppercase;font-size:12px;color:var(--muted);font-weight:600}
+  h1{font-family:Fraunces,serif;font-weight:800;font-size:clamp(38px,8vw,64px);line-height:1;margin:12px 0 10px;letter-spacing:-.02em}
+  h1 span{font-style:italic;font-weight:400;color:#c2572f}
+  .sub{color:var(--muted);font-size:15px}
+  .stats{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:22px 0 6px}
+  .pill{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:500}
+  .pill b{font-family:Fraunces,serif;font-size:15px}
+  .search{position:sticky;top:0;z-index:5;padding:12px 0;background:linear-gradient(var(--paper) 75%,transparent)}
+  .search input{width:100%;padding:14px 18px;border-radius:14px;border:1px solid var(--line);background:var(--card);font:inherit;font-size:16px;outline:none;box-shadow:0 2px 10px #0000000a}
+  .search input:focus{border-color:#c2572f}
+  nav{display:flex;gap:8px;overflow-x:auto;padding:4px 0 14px;scrollbar-width:none}
+  nav a{flex:none;text-decoration:none;color:var(--ink);font-size:13px;font-weight:500;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
+  nav a i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+  .wrap{max-width:1180px}
+  header,.search,nav{max-width:760px;margin-left:auto;margin-right:auto}
+  nav{justify-content:center;flex-wrap:wrap}
+  #main{column-count:2;column-gap:32px;margin-top:16px}
+  section{break-inside:avoid;-webkit-column-break-inside:avoid;page-break-inside:avoid;display:inline-block;width:100%;margin:0 0 30px}
+  @media (max-width:820px){#main{column-count:1}nav{flex-wrap:nowrap;justify-content:flex-start}}
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+  .sec-head .emoji{font-size:22px}
+  .sec-head h2{font-family:Fraunces,serif;font-weight:600;font-size:24px;margin:0}
+  .sec-head .count{margin-left:auto;font-family:Fraunces,serif;color:var(--accent);font-weight:800;font-size:20px}
+  ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+  li a{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:12px;text-decoration:none;color:var(--ink);transition:transform .15s,box-shadow .15s,border-color .15s;border-left:4px solid var(--accent)}
+  li a:hover{transform:translateX(4px);box-shadow:0 6px 18px #0000000f;border-color:var(--accent)}
+  .name{font-weight:600;font-size:15px;flex:1;min-width:0}
+  .slug{display:block;font-weight:400;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:ui-monospace,Menlo,monospace}
+  .tag{font-size:11px;font-weight:600;padding:3px 8px;border-radius:999px;background:#2b2520;color:#fff;flex:none}
+  .tag.like{background:#ffe7d6;color:#a0431d}
+  .arrow{color:var(--accent);font-size:18px;flex:none}
+  .empty{text-align:center;color:var(--muted);padding:40px 0;display:none}
+  footer{text-align:center;color:var(--muted);font-size:13px;margin-top:50px}
+  footer a{color:#c2572f}
+  .tabs{display:inline-flex;gap:4px;padding:5px;margin:18px 0 6px;background:var(--card);border:1px solid var(--line);border-radius:999px;box-shadow:0 2px 10px #0000000a}
+  .tab{font:inherit;font-size:15px;font-weight:600;border:0;background:transparent;color:var(--muted);padding:10px 20px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s}
+  .tab:hover{color:var(--ink)}
+  .tab.on{background:var(--ink);color:var(--paper)}
+  .desc{display:block;font-weight:400;font-size:13px;color:var(--muted);margin-top:2px;line-height:1.35}
+  .code{flex:none;font-size:12px;font-weight:600;color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+  .code:hover{color:var(--ink);border-color:var(--ink)}
+  li.row{display:flex;align-items:center;gap:8px;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;transition:transform .15s,box-shadow .15s}
+  li.row:hover{transform:translateX(4px);box-shadow:0 6px 18px #0000000f}
+  li.row>a.main{display:flex;align-items:center;gap:12px;flex:1;min-width:0;text-decoration:none;color:var(--ink);padding:0;border:0;background:none;box-shadow:none;transform:none}
+  .src{font-size:12px;font-weight:600;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:2px 9px;margin-left:auto}
+  .src+.count{margin-left:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Mark the Artist · Hugging Face, GitHub &amp; Netlify</div>
+    <h1>The <span>Workshop</span></h1>
+    <div class="tabs" role="tablist">
+      <button class="tab" data-tab="hf" role="tab">🤗 Hugging Face</button>
+      <button class="tab" data-tab="github" role="tab">🐙 GitHub Pages</button>
+      <button class="tab" data-tab="netlify" role="tab">◆ Netlify</button>
+    </div>
+    <div class="sub" id="sub"></div>
+    <div class="stats" id="stats"></div>
+  </header>
+  <div class="search"><input id="q" type="search" placeholder="Search all three — Hugging Face, GitHub & Netlify…" autocomplete="off"></div>
+  <nav id="nav"></nav>
+  <main id="main"></main>
+  <div class="empty" id="empty">Nothing matches that search.</div>
+  <footer id="foot"></footer>
+</div>
+<script>
+
+const P = "🔒";
+const hfGroups = [
+  {id:"ai", title:"AI & Image Generation", emoji:"✨", color:"#8b5cf6", items:[
+    ["Spicy-krea2",{likes:9}],["Spicy-krea2-mcp"],
+
+    ["storyforge"]
+
+    ]},
+  {id:"maker", title:"Maker & Design", emoji:"🪚", color:"#b7791f", items:[
+
+    ["step-stool-configuration"],
+    ["rubik-s-cube-mosaic-maker",{label:"Rubik's Cube Mosaic Maker"}],["cube-8"],["TileVisualizer",{label:"Tile Visualizer"}],
+    ["Premier-Mesh"],["curve-generator-2"],["mandala-maker-ver-01"],["mandala-maker-ver-02"],
+    ["mandala-maker-2-v0-71"],["mandala-maker-0-81"],["mandala-maker-0-91"]]},
+  {id:"toys", title:"Visual Toys", emoji:"🌈", color:"#d6457f", items:[
+
+    ["pixelglow-gridcraft-litebright-simulation",{label:"PixelGlow Gridcraft Lite-Brite"}],
+    ["codecanvas-wizardry"],["text-wave"],["text-visualiser"],["wiggle"],["trippy-particle-accelerator"]]},
+  {id:"movies", title:"Movie Computer Screens", emoji:"🎬", color:"#2f7f6f", items:[
+    ["hal-9000-online",{label:"HAL 9000 Online"}],["matrix-code-rain",{label:"Matrix Code Rain"}],
+    ["the-war-games-missile-command-interface-in-wargames-1983",{label:"WarGames Missile Command (1983)"}],
+    ["the-death-star-plans-hologram-in-star-wars-1977",{label:"Death Star Plans Hologram (1977)"}],
+    ["jurassic-park-3d-file-system",{label:"Jurassic Park 3D File System"}],
+    ["the-you-are-experiencing-a-car-accident-screen-in-fight-club-1999",{label:"Fight Club Car Accident Screen (1999)"}],
+    ["t-8000-visual-processor",{label:"T-8000 Visual Processor"}],
+    ["westworld-host-interface-delores",{label:"Westworld Host Interface"}],["medical-tricorder"]]},
+  {id:"games", title:"Games", emoji:"♟️", color:"#3b6fd4", items:[
+    ["rummy-scorekeeper"],["chess-openings"],["checkers"],["checkers-humans-ai-or-both",{label:"Checkers: Humans, AI, or Both"}],
+    ["unbeatable-tic-tac-toe"],["tic-tac-toe-titanium-tornado"],["friend-or-faux"],["friend-or-faux-2"]]},
+  {id:"utils", title:"Utilities", emoji:"🧰", color:"#4b7d2a", items:[
+    ["word-pairs",{priv:1}],["text-line-parser"],["parser-2"],["clipboard-parser"],["json-validator",{label:"JSON Validator"}],
+    ["css-gradient-generator",{label:"CSS Gradient Generator"}],["css-shadow-box-maker",{label:"CSS Shadow Box Maker"}],
+    ["svg-creator",{label:"SVG Creator"}],["qr-code-generator",{label:"QR Code Generator"}],["elegant-markdown-editor"],
+    ["pomodoro-timer-keeps-you-focused-and-sharp",{label:"Pomodoro Timer"}],["calorie-converter"]]},
+  {id:"tests", title:"Tests & Leftovers", emoji:"🧪", color:"#7a6f62", items:[
+    ["mark-s-hugging-face-links",{label:"Mark's Hugging Face Links"}],
+    ["deepsite-test",{label:"DeepSite Test"}],["test1"],["test2"],["test21"],["test123"],["3"],["31"]]},
+  {id:"data", title:"Datasets", emoji:"🗂️", color:"#1f1b16", dataset:true, items:[
+    ["word-pairs-projects",{priv:1}]]}
+];
+const ghGroups = [
+  {id:"gh-art", title:"Art & Image Tools", emoji:"🎨", color:"#d6457f", items:[
+    ["ElasticLoop","Elastic Loop","Turns a portrait, image, video or live camera into one continuous line drawing."],
+    ["Art-visualizer","Art Visualizer","Visualize an experiment with art made from nested pieces."],
+    ["Flipbook-Maker","Flipbook Maker","Turns GIFs and videos into printable, numbered flipbook pages."],
+    ["imagepairs","Pair Oscillator","Each pair of images flips back and forth so the differences jump out."],
+    ["Premier-Mesh","Premier Mesh","Touch-sculpted glowing mesh with cross-eyed and parallel 3D stereo views."],
+    ["twin-pane-stereoscope","Twin Pane Stereoscope","Side-by-side stereo pairs with linked zoom and pan, zip loading and TV casting."],
+    ["swipe-viewer","Handswipe Viewer","Opens zip files and flips through pictures with hand gestures."],
+    ["video-loop-player","Ping-Pong Loop","Plays a video forward then backward forever with a seamless turnaround."]]},
+  {id:"gh-maker", title:"Maker & CNC", emoji:"🪚", color:"#b7791f", items:[
+    ["Boxsmith","Boxsmith","Laser-cut box generator."],
+    ["Polysmith","Polysmith","Platonic solids for the laser."],
+    ["Patternsmith","Patternsmith","Laser pattern maker."],
+    ["CNC-visualization","V-Bit Headstone Simulator","Design headstone lettering, generate a V-carve toolpath, preview it in 3D."],
+    ["Organic-Curve-Generator-and-Visualizer","Organic Curve Generator","Create and visualize organic curves for CNC fabrication."]]},
+  {id:"gh-games", title:"Games", emoji:"♟️", color:"#3b6fd4", items:[
+    ["Marks-Games","Mark Plaga TV Hub","TV-friendly launcher for your browser games, driven by a remote's arrow keys."],
+    ["Markplaga-battleship","Battleship: Deep Command","An online game of Battleship."],
+    ["face-tic-tac-toe","Face-Tac-Toe Online","Tic-tac-toe, online, with faces."],
+    ["rubiks-cube-tutorial","CUBED","An interactive 3D Rubik's Cube solving tutorial."],
+    ["Rubiks-cube-gpt","CUBED (25 Environments)","The CUBED tutorial with 25 visual environments."]]},
+  {id:"gh-utils", title:"Utilities", emoji:"🧰", color:"#4b7d2a", items:[
+    ["onedrive-text","OneDrive Text","Open and edit plain-text OneDrive files from iPhone or iPad."],
+    ["parse-text-to-clipboard","Mark's Awesome Parsing Tool","Splits copied text into sections and copies them one at a time."],
+    ["IGAAKSEyeArmor","IGAAKS — Eye Armor",""]]}
+];
+const nlGroups = [
+  {id:"nl-art", title:"Art & Image Tools", emoji:"🎨", color:"#d6457f", items:[
+    ["elastic-loop-plaga","Elastic Loop","One continuous line drawing from images, video or live camera."],
+    ["artvis","Art Visualizer","Visualize art made from nested pieces."],
+    ["clever-twilight-be8bfc","Pair Oscillator","Image pairs flip back and forth so differences jump out."],
+    ["nimble-yeot-98d8c0","Pair Oscillator (second copy)",""],
+    ["halftone-generator","Halftone Image Processor",""],
+    ["halftone-generator1","Halftone Image Processor (second copy)",""],
+    ["nested-vector-editor","Vector Drawing Tool",""],
+    ["flowerdesigner","Phyllotaxis Flower Designer","Mathematical flower designer."],
+    ["flowerdesigner2","The Math of Flowers","3D flower visualization."],
+    ["ornate-phoenix-320c9e","Motion Lab","Two-phone camera skeleton tracking."]]},
+  {id:"nl-maker", title:"Maker", emoji:"🪚", color:"#b7791f", items:[
+    ["laser-cube","Laser-Cut Finger-Joint Cube Designer",""]]},
+  {id:"nl-games", title:"Games", emoji:"♟️", color:"#3b6fd4", items:[
+    ["markplaga-battleship-online","Battleship: Deep Command",""],
+    ["rubiks-cube-academy","CUBED","Learn to solve the Rubik's Cube."],
+    ["cat-matrix-game","Cat Matrix",""],
+    ["face-tic-tac-toe","Face-Tac-Toe",""],
+    ["markplaga-3d-tic-tac-toe","3D Tic-Tac-Toe",""],
+    ["connect-four-with-themes","Connect Four with Themes",""],
+    ["mastermind-online-markplaga","Mastermind Online",""],
+    ["500-rummy-tv","Rummy 500 TV",""],
+    ["markplaga-minesweeper1","Minesweeper",""]]},
+  {id:"nl-ai", title:"AI & Voice", emoji:"✨", color:"#8b5cf6", items:[
+    ["eleven-labs-with-sample-mark-plaga","ElevenLabs with Sample",""],
+    ["elevenlabs-txt-2-speech-markplaga","ElevenLabs Text-to-Speech",""],
+    ["markplaga-txt2image1","Text to Image 1",""],
+    ["markplaga-txt2img2","Text to Image 2",""]]},
+  {id:"nl-utils", title:"Utilities & Learning", emoji:"🧰", color:"#4b7d2a", items:[
+    ["mark-onedrive-text","OneDrive Text","Edit OneDrive text files from iPhone or iPad."],
+    ["pdfviewer-editor","PDF Reader & Editor",""],
+    ["global-clipboard-manager","Global Clipboard Manager",""],
+    ["electrical-academy","Electrical Academy",""]]}
+];
+const pretty = s => s.replace(/-/g," ").replace(/\b(v) (\d)/gi,"v$2").replace(/\bver (\d)/gi,"v$1")
+  .replace(/\b\w/g,c=>c.toUpperCase()).replace(/(\d) (\d)/g,"$1.$2").replace(/\bV(\d)/g,"v$1");
+const esc = t => String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
+const $ = id => document.getElementById(id);
+const hfCount = hfGroups.reduce((a,g)=>a+(g.dataset?0:g.items.length),0);
+const nlCount = nlGroups.reduce((a,g)=>a+g.items.length,0);
+const ghCount = ghGroups.reduce((a,g)=>a+g.items.length,0);
+const TABS = {
+  hf:{sub:"Every Hugging Face Space and dataset, one per line.",
+      stats:`<div class="pill"><b>${hfCount}</b> Spaces</div><div class="pill"><b>1</b> Dataset</div><div class="pill"><b>2</b> Private 🔒</div>`,
+      foot:'Profile: <a href="https://huggingface.co/MarkTheArtist">huggingface.co/MarkTheArtist</a>',
+      groups:hfGroups,
+      row:(g,[slug,o={}])=>{
+        const url=`https://huggingface.co/${g.dataset?"datasets":"spaces"}/MarkTheArtist/${slug}`;
+        const name=o.label||pretty(slug);
+        const tags=(o.priv?`<span class="tag">🔒 Private</span>`:"")+(o.likes?`<span class="tag like">♥ ${o.likes}</span>`:"");
+        return `<li data-s="${esc((name+" "+slug).toLowerCase())}"><a href="${url}" target="_blank" rel="noopener"><span class="name">${esc(name)}<span class="slug">${esc(slug)}</span></span>${tags}<span class="arrow">↗</span></a></li>`;
+      }},
+  netlify:{sub:"Every working Netlify site, one per line.",
+      stats:`<div class="pill"><b>${nlCount}</b> Live sites</div><div class="pill">*.netlify.app</div>`,
+      foot:'Dashboard: <a href="https://app.netlify.com">app.netlify.com</a>',
+      groups:nlGroups,
+      row:(g,[site,name,desc])=>{
+        const url=`https://${site}.netlify.app/`;
+        return `<li class="row" data-s="${esc((name+" "+site+" "+desc).toLowerCase())}"><a class="main" href="${url}" target="_blank" rel="noopener"><span class="name">${esc(name)}${desc?`<span class="desc">${esc(desc)}</span>`:""}<span class="slug">${esc(site)}.netlify.app</span></span><span class="arrow">↗</span></a><a class="code" href="https://app.netlify.com/projects/${site}" target="_blank" rel="noopener">admin</a></li>`;
+      }},
+  github:{sub:"Every GitHub repo with a live GitHub Pages site, one per line.",
+      stats:`<div class="pill"><b>${ghCount}</b> Live sites</div><div class="pill">markplaga.github.io</div>`,
+      foot:'Profile: <a href="https://github.com/markplaga">github.com/markplaga</a>',
+      groups:ghGroups,
+      row:(g,[repo,name,desc])=>{
+        const url=`https://markplaga.github.io/${repo}/`;
+        return `<li class="row" data-s="${esc((name+" "+repo+" "+desc).toLowerCase())}"><a class="main" href="${url}" target="_blank" rel="noopener"><span class="name">${esc(name)}${desc?`<span class="desc">${esc(desc)}</span>`:""}<span class="slug">markplaga.github.io/${esc(repo)}</span></span><span class="arrow">↗</span></a><a class="code" href="https://github.com/markplaga/${repo}" target="_blank" rel="noopener">code</a></li>`;
+      }}
+};
+let current="hf";
+function render(tab){
+  current = TABS[tab]?tab:"hf"; const T=TABS[current];
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.tab===current));
+  $("sub").textContent=T.sub; $("stats").innerHTML=T.stats; $("foot").innerHTML=T.foot;
+  $("q").value="";
+  $("nav").innerHTML=T.groups.map(g=>`<a href="#${current}" data-jump="${g.id}"><i style="background:${g.color}"></i>${g.title}</a>`).join("");
+  $("main").innerHTML=T.groups.map(g=>`<section id="${g.id}" style="--accent:${g.color}"><div class="sec-head"><span class="emoji">${g.emoji}</span><h2>${g.title}</h2><span class="count">${g.items.length}</span></div><ul>${g.items.map(it=>T.row(g,it)).join("")}</ul></section>`).join("");
+  $("empty").style.display="none";
+}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{ if(location.hash!=="#"+b.dataset.tab) location.hash=b.dataset.tab; else render(b.dataset.tab); }));
+$("nav").addEventListener("click",e=>{const a=e.target.closest("a[data-jump]"); if(!a)return; e.preventDefault(); document.getElementById(a.dataset.jump).scrollIntoView({behavior:"smooth",block:"start"});});
+window.addEventListener("hashchange",()=>render(location.hash.slice(1)));
+render(location.hash.slice(1)||"hf");
+const SRC={hf:"🤗 Hugging Face",github:"🐙 GitHub",netlify:"◆ Netlify"};
+const keyOf=(tab,g,it)=> tab==="hf" ? ((it[1]&&it[1].label)||pretty(it[0]))+" "+it[0] : it[1]+" "+it[0]+" "+(it[2]||"");
+const reEsc=t=>t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+const matches=(text,q)=>q.split(/\s+/).filter(Boolean).every(w=>new RegExp("(^|[^a-z0-9])"+reEsc(w)).test(text.replace(/-/g," ")));
+function searchAll(q){
+  let total=0, html="", nav="";
+  for(const tab of ["hf","github","netlify"]){
+    const T=TABS[tab];
+    for(const g of T.groups){
+      const hits=g.items.filter(it=>matches(keyOf(tab,g,it).toLowerCase(),q));
+      if(!hits.length) continue;
+      total+=hits.length;
+      const id="s-"+g.id;
+      nav+=`<a href="#${current}" data-jump="${id}"><i style="background:${g.color}"></i>${SRC[tab].split(" ")[0]} ${g.title}</a>`;
+      html+=`<section id="${id}" style="--accent:${g.color}"><div class="sec-head"><span class="emoji">${g.emoji}</span><h2>${g.title}</h2><span class="src">${SRC[tab]}</span><span class="count">${hits.length}</span></div><ul>${hits.map(it=>T.row(g,it)).join("")}</ul></section>`;
+    }
+  }
+  $("main").innerHTML=html; $("nav").innerHTML=nav;
+  $("stats").innerHTML=`<div class="pill"><b>${total}</b> match${total===1?"":"es"} across all three</div>`;
+  $("sub").textContent="Searching Hugging Face, GitHub Pages and Netlify together.";
+  document.querySelectorAll(".tab").forEach(b=>b.classList.remove("on"));
+  $("empty").style.display=total?"none":"block";
+}
+$("q").addEventListener("input",e=>{
+  const q=e.target.value.trim().toLowerCase();
+  if(!q){ const v=""; render(current); return; }
+  searchAll(q);
+});
+</script>
+</body>
+</html>
