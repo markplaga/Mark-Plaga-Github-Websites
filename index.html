@@ -71,6 +71,10 @@
   li.row>a.main{display:flex;align-items:center;gap:12px;flex:1;min-width:0;text-decoration:none;color:var(--ink);padding:0;border:0;background:none;box-shadow:none;transform:none}
   .src{font-size:12px;font-weight:600;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:2px 9px;margin-left:auto}
   .src+.count{margin-left:10px}
+  .ico{flex:none;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;overflow:hidden;background:#fff;border:1px solid var(--line);box-shadow:0 1px 3px #0000000f}
+  .ico img{width:100%;height:100%;object-fit:cover;display:block}
+  .ico.emo{font-size:22px;background:#fbf7ef}
+  .ico.fb{background:var(--c,#7a6f62);color:#fff;font-family:Fraunces,serif;font-weight:800;font-size:19px;border-color:transparent}
 </style>
 </head>
 <body>
@@ -97,19 +101,15 @@
 const P = "🔒";
 const hfGroups = [
   {id:"ai", title:"AI & Image Generation", emoji:"✨", color:"#8b5cf6", items:[
-    ["Spicy-krea2",{likes:9}],["Spicy-krea2-mcp"],
-
+    ["Spicy-krea2",{likes:9}],["Spicy-krea2-mcp",{likes:1}],["lipread-live-camera-lip-reader-local",{label:"LipRead: Live Camera Lip Reader"}],
     ["storyforge"]
-
     ]},
   {id:"maker", title:"Maker & Design", emoji:"🪚", color:"#b7791f", items:[
-
-    
+    ["boxsmith-relay",{label:"Boxsmith Relay"}],
     ["rubik-s-cube-mosaic-maker",{label:"Rubik's Cube Mosaic Maker"}],["TileVisualizer",{label:"Tile Visualizer"}],
     ["Premier-Mesh"],["curve-generator-2"],["mandala-maker-ver-01"],["mandala-maker-ver-02"],
     ["mandala-maker-2-v0-71"],["mandala-maker-0-81"],["mandala-maker-0-91"]]},
   {id:"toys", title:"Visual Toys", emoji:"🌈", color:"#d6457f", items:[
-
     ["pixelglow-gridcraft-litebright-simulation",{label:"PixelGlow Gridcraft Lite-Brite"}],
     ["codecanvas-wizardry"],["text-wave"],["text-visualiser"],["wiggle"],["trippy-particle-accelerator"]]},
   {id:"movies", title:"Movie Computer Screens", emoji:"🎬", color:"#2f7f6f", items:[
@@ -134,74 +134,71 @@ const hfGroups = [
   {id:"data", title:"Datasets", emoji:"🗂️", color:"#1f1b16", dataset:true, items:[
     ["word-pairs-projects",{priv:1}]]}
 ];
+const HF_EMOJI={"Spicy-krea2":"🏆","3":"😻","31":"👁","TileVisualizer":"📊","word-pairs":"🔁","Premier-Mesh":"🕸️","Spicy-krea2-mcp":"🌶️","lipread-live-camera-lip-reader-local":"🧩","boxsmith-relay":"📦"};
 const ghGroups = [
   {id:"gh-art", title:"Art & Image Tools", emoji:"🎨", color:"#d6457f", items:[
-    ["ElasticLoop","Elastic Loop","Turns a portrait, image, video or live camera into one continuous line drawing."],
-    ["Interactive-Wood-Sculpture","Interactive Wood Sculpture",""],
-    ["Art-visualizer","Art Visualizer","Visualize an experiment with art made from nested pieces."],
-    ["Flipbook-Maker","Flipbook Maker","Turns GIFs and videos into printable, numbered flipbook pages."],
-    ["imagepairs","Pair Oscillator","Each pair of images flips back and forth so the differences jump out."],
-    ["Premier-Mesh","Premier Mesh","Touch-sculpted glowing mesh with cross-eyed and parallel 3D stereo views."],
-    ["twin-pane-stereoscope","Twin Pane Stereoscope","Side-by-side stereo pairs with linked zoom and pan, zip loading and TV casting."],
-    ["swipe-viewer","Handswipe Viewer","Opens zip files and flips through pictures with hand gestures."],
-    ["video-loop-player","Ping-Pong Loop","Plays a video forward then backward forever with a seamless turnaround."]]},
+    ["ElasticLoop", "Elastic Loop", "Turns a portrait, image, video or live camera into one continuous line drawing.", ""],
+    ["Interactive-Wood-Sculpture", "Interactive Wood Sculpture", "", "https://markplaga.github.io/Interactive-Wood-Sculpture/icons/apple-touch-icon.png"],
+    ["Premier-Mesh", "Premier Mesh", "Touch-sculpted glowing mesh with cross-eyed and parallel 3D stereo views.", "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23080a10'/%3E%3Cg fill='none' stroke='%236ee7ff' stroke-width='3'%3E%3Cpath d='M13 39 25 17l22 3 5 25-27 6Z'/%3E%3Cpath d='m13 39 34-19M25 17l27 28M25 51l22-31'/%3E%3C/g%3E%3Cg fill='%23fff'%3E%3Ccircle cx='13' cy='39' r='3'/%3E%3Ccircle cx='25' cy='17' r='3'/%3E%3Ccircle cx='47' cy='20' r='3'/%3E%3Ccircle cx='52' cy='45' r='3'/%3E%3Ccircle cx='25' cy='51' r='3'/%3E%3C/g%3E%3C/svg%3E"],
+    ["Art-visualizer", "Art Visualizer", "Visualize an experiment with art made from nested pieces.", ""],
+    ["Flipbook-Maker", "Flipbook Maker", "Turns GIFs and videos into printable, numbered flipbook pages.", ""],
+    ["imagepairs", "Pair Oscillator", "Each pair of images flips back and forth so the differences jump out.", ""],
+    ["twin-pane-stereoscope", "Twin Pane Stereoscope", "Side-by-side stereo pairs with linked zoom and pan, zip loading and TV casting.", "https://markplaga.github.io/twin-pane-stereoscope/icons/apple-touch-icon.png"],
+    ["swipe-viewer", "Handswipe Viewer", "Opens zip files and flips through pictures with hand gestures.", ""],
+    ["Gestures", "Gesture Slideshow", "Zip slideshow viewer driven by one-hand gesture sets.", ""],
+    ["video-loop-player", "Ping-Pong Loop", "Plays a video forward then backward forever with a seamless turnaround.", ""]]},
   {id:"gh-maker", title:"Maker & CNC", emoji:"🪚", color:"#b7791f", items:[
-    ["Boxsmith","Boxsmith","Laser-cut box generator."],
-    ["Polysmith","Polysmith","Platonic solids for the laser."],
-    ["Patternsmith","Patternsmith","Laser pattern maker."],
-    ["Lasersmith","Lasersmith",""],
-    ["CNC-visualization","V-Bit Headstone Simulator","Design headstone lettering, generate a V-carve toolpath, preview it in 3D."],
-    ["Organic-Curve-Generator-and-Visualizer","Organic Curve Generator","Create and visualize organic curves for CNC fabrication."]]},
+    ["Boxsmith", "Boxsmith", "Laser-cut box generator.", "https://markplaga.github.io/Boxsmith/icons/apple-touch-icon.png"],
+    ["Polysmith", "Polysmith", "Platonic solids for the laser.", "https://markplaga.github.io/Polysmith/icons/icon-180.png"],
+    ["Patternsmith", "Patternsmith", "Laser pattern maker.", ""],
+    ["Lasersmith", "Lasersmith", "", ""],
+    ["CNC-visualization", "V-Bit Headstone Simulator", "Design headstone lettering, generate a V-carve toolpath, preview it in 3D.", ""],
+    ["Organic-Curve-Generator-and-Visualizer", "Organic Curve Generator", "Create and visualize organic curves for CNC fabrication.", ""]]},
   {id:"gh-games", title:"Games", emoji:"♟️", color:"#3b6fd4", items:[
-    ["Marks-Games","Mark Plaga TV Hub","TV-friendly launcher for your browser games, driven by a remote's arrow keys."],
-    ["Markplaga-battleship","Battleship: Deep Command","An online game of Battleship."],
-    ["face-tic-tac-toe","Face-Tac-Toe Online","Tic-tac-toe, online, with faces."],
-    ["rubiks-cube-tutorial","CUBED","An interactive 3D Rubik's Cube solving tutorial."],
-    ["Rubiks-cube-gpt","CUBED (25 Environments)","The CUBED tutorial with 25 visual environments."]
-    ,["MrPotatoHead","Spudverse 3D","Freeform potato studio — build your own Mr. Potato Head."]]},
+    ["Marks-Games", "Mark Plaga TV Hub", "TV-friendly launcher for your browser games, driven by a remote's arrow keys.", ""],
+    ["MrPotatoHead", "Spudverse 3D", "Freeform potato studio — build your own Mr. Potato Head.", ""],
+    ["Markplaga-battleship", "Battleship: Deep Command", "An online game of Battleship.", ""],
+    ["face-tic-tac-toe", "Face-Tac-Toe Online", "Tic-tac-toe, online, with faces.", ""],
+    ["rubiks-cube-tutorial", "CUBED", "An interactive 3D Rubik's Cube solving tutorial.", ""],
+    ["Rubiks-cube-gpt", "CUBED (25 Environments)", "The CUBED tutorial with 25 visual environments.", ""]]},
   {id:"gh-utils", title:"Utilities", emoji:"🧰", color:"#4b7d2a", items:[
-    ["onedrive-text","OneDrive Text","Open and edit plain-text OneDrive files from iPhone or iPad."],
-    ["parse-text-to-clipboard","Mark's Awesome Parsing Tool","Splits copied text into sections and copies them one at a time."],
-    ["IGAAKSEyeArmor","IGAAKS — Eye Armor",""]]}
+    ["onedrive-text", "OneDrive Text", "Open and edit plain-text OneDrive files from iPhone or iPad.", "https://markplaga.github.io/onedrive-text/apple-touch-icon.png"],
+    ["parse-text-to-clipboard", "Mark's Awesome Parsing Tool", "Splits copied text into sections and copies them one at a time.", ""],
+    ["IGAAKSEyeArmor", "IGAAKS — Eye Armor", "Handcrafted brass and steel eyewear.", ""]]}
 ];
 const nlGroups = [
   {id:"nl-art", title:"Art & Image Tools", emoji:"🎨", color:"#d6457f", items:[
-    ["elastic-loop-plaga","Elastic Loop","One continuous line drawing from images, video or live camera."],
-    ["artvis","Art Visualizer","Visualize art made from nested pieces."],
-    ["clever-twilight-be8bfc","Pair Oscillator","Image pairs flip back and forth so differences jump out."],
-    ["nimble-yeot-98d8c0","Pair Oscillator (second copy)",""],
-    ["halftone-generator","Halftone Image Processor",""],
-    ["halftone-generator1","Halftone Image Processor (second copy)",""],
-    ["nested-vector-editor","Vector Drawing Tool",""],
-    ["flowerdesigner","Phyllotaxis Flower Designer","Mathematical flower designer."],
-    ["flowerdesigner2","The Math of Flowers","3D flower visualization."],
-    ["ornate-phoenix-320c9e","Motion Lab","Two-phone camera skeleton tracking."]]},
+    ["elastic-loop-plaga", "Elastic Loop", "One continuous line drawing from images, video or live camera.", "https://elastic-loop-plaga.netlify.app/favicon.ico"],
+    ["clever-twilight-be8bfc", "Pair Oscillator", "Image pairs flip back and forth so differences jump out.", "https://clever-twilight-be8bfc.netlify.app/favicon.ico"],
+    ["motionlab-markplaga", "Motion Lab", "Two-phone camera skeleton tracking.", "https://motionlab-markplaga.netlify.app/favicon.ico"],
+    ["flowerdesigner", "Phyllotaxis Flower Designer", "Mathematical flower designer.", "https://flowerdesigner.netlify.app/favicon.ico"],
+    ["halftone-generator", "Halftone Image Processor", "", "https://halftone-generator.netlify.app/favicon.ico"],
+    ["halftone-generator1", "Halftone Image Processor (second copy)", "", "https://halftone-generator1.netlify.app/favicon.ico"]]},
   {id:"nl-maker", title:"Maker", emoji:"🪚", color:"#b7791f", items:[
-    ["laser-cube","Laser-Cut Finger-Joint Cube Designer",""]
-    ,["boxsmith-ai-experiment","From Words to Wood","An AI and a laser-cut rainbow sculpture."]]},
+    ["lasersmith", "Lasersmith", "", "https://lasersmith.netlify.app/favicon.ico"],
+    ["boxsmith-tower-story", "The Morning a 3D Torus Became a Tower", "A Boxsmith story.", "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23f6efe4'/%3E%3Crect x='2' y='2' width='12' height='12' rx='1' fill='%23e9cf9f' stroke='%236b4226' stroke-width='1.2'/%3E%3Crect x='4.4' y='4.4' width='7.2' height='7.2' fill='%23ef4444' opacity='.9'/%3E%3Crect x='4.4' y='4.4' width='7.2' height='7.2' fill='%233b82f6' opacity='.45'/%3E%3C/svg%3E"],
+    ["boxsmith-ai-experiment", "From Words to Wood", "An AI and a laser-cut rainbow sculpture.", "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Crect width='10' height='10' rx='2' fill='%23e9cf9f'/%3E%3Crect x='2' y='2' width='6' height='6' fill='%23ef4444'/%3E%3Crect x='3.5' y='3.5' width='3' height='3' fill='%233b82f6'/%3E%3C/svg%3E"]]},
   {id:"nl-games", title:"Games", emoji:"♟️", color:"#3b6fd4", items:[
-    ["markplaga-battleship-online","Battleship: Deep Command",""],
-    ["rubiks-cube-academy","CUBED","Learn to solve the Rubik's Cube."],
-    ["cat-matrix-game","Cat Matrix",""],
-    ["face-tic-tac-toe","Face-Tac-Toe",""],
-    ["markplaga-3d-tic-tac-toe","3D Tic-Tac-Toe",""],
-    ["connect-four-with-themes","Connect Four with Themes",""],
-    ["mastermind-online-markplaga","Mastermind Online",""],
-    ["500-rummy-tv","Rummy 500 TV",""],
-    ["markplaga-minesweeper1","Minesweeper",""]]},
-  {id:"nl-ai", title:"AI & Voice", emoji:"✨", color:"#8b5cf6", items:[
-    ["eleven-labs-with-sample-mark-plaga","ElevenLabs with Sample",""],
-    ["elevenlabs-txt-2-speech-markplaga","ElevenLabs Text-to-Speech",""],
-    ["markplaga-txt2image1","Text to Image 1",""],
-    ["markplaga-txt2img2","Text to Image 2",""]]},
-  {id:"nl-utils", title:"Utilities & Learning", emoji:"🧰", color:"#4b7d2a", items:[
-    ["mark-onedrive-text","OneDrive Text","Edit OneDrive text files from iPhone or iPad."],
-    ["pdfviewer-editor","PDF Reader & Editor",""],
-    ["global-clipboard-manager","Global Clipboard Manager",""],
-    ["electrical-academy","Electrical Academy",""]]}
+    ["markplaga-battleship-online", "Battleship: Deep Command", "", ""],
+    ["rubiks-cube-academy", "CUBED", "Learn to solve the Rubik's Cube.", "https://rubiks-cube-academy.netlify.app/favicon.ico"],
+    ["face-tic-tac-toe", "Face-Tac-Toe", "", "https://face-tic-tac-toe.netlify.app/favicon.svg"],
+    ["markplaga-3d-tic-tac-toe", "3D Tic-Tac-Toe", "", "https://markplaga-3d-tic-tac-toe.netlify.app/favicon.ico"],
+    ["connect-four-with-themes", "Connect Four — Ten Themes", "", ""],
+    ["mastermind-online-markplaga", "Mastermind Atelier", "", "https://mastermind-online-markplaga.netlify.app/favicon.ico"],
+    ["500-rummy-tv", "Rummy 500 Table", "", ""]]},
+  {id:"nl-utils", title:"Utilities", emoji:"🧰", color:"#4b7d2a", items:[
+    ["mark-onedrive-text", "OneDrive Text", "Edit OneDrive text files from iPhone or iPad.", "https://mark-onedrive-text.netlify.app/apple-touch-icon.png"],
+    ["pdfviewer-editor", "PDF Reader & Editor", "", "https://pdfviewer-editor.netlify.app/favicon.ico"],
+    ["global-clipboard-manager", "Global Clipboard Manager", "", "https://global-clipboard-manager.netlify.app/favicon.ico"]]}
 ];
 const pretty = s => s.replace(/-/g," ").replace(/\b(v) (\d)/gi,"v$2").replace(/\bver (\d)/gi,"v$1")
   .replace(/\b\w/g,c=>c.toUpperCase()).replace(/(\d) (\d)/g,"$1.$2").replace(/\bV(\d)/g,"v$1");
+const ICON=(src,emoji,name,color)=>{
+  const letter=esc((name||"?").trim().charAt(0).toUpperCase());
+  if(src) return `<span class="ico"><img src="${esc(src)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.classList.add('fb');this.parentNode.style.setProperty('--c','${color}');this.parentNode.textContent='${letter}'"></span>`;
+  if(emoji) return `<span class="ico emo">${emoji}</span>`;
+  return `<span class="ico fb" style="--c:${color}">${letter}</span>`;
+};
 const esc = t => String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
 const $ = id => document.getElementById(id);
 const hfCount = hfGroups.reduce((a,g)=>a+(g.dataset?0:g.items.length),0);
@@ -216,23 +213,23 @@ const TABS = {
         const url=`https://huggingface.co/${g.dataset?"datasets":"spaces"}/MarkTheArtist/${slug}`;
         const name=o.label||pretty(slug);
         const tags=(o.priv?`<span class="tag">🔒 Private</span>`:"")+(o.likes?`<span class="tag like">♥ ${o.likes}</span>`:"");
-        return `<li data-s="${esc((name+" "+slug).toLowerCase())}"><a href="${url}" target="_blank" rel="noopener"><span class="name">${esc(name)}<span class="slug">${esc(slug)}</span></span>${tags}<span class="arrow">↗</span></a></li>`;
+        return `<li data-s="${esc((name+" "+slug).toLowerCase())}"><a href="${url}" target="_blank" rel="noopener">${ICON("",HF_EMOJI[slug]||(g.dataset?"🗂️":"🐳"),name,g.color)}<span class="name">${esc(name)}<span class="slug">${esc(slug)}</span></span>${tags}<span class="arrow">↗</span></a></li>`;
       }},
   netlify:{sub:"Every working Netlify site, one per line.",
       stats:`<div class="pill"><b>${nlCount}</b> Live sites</div><div class="pill">*.netlify.app</div>`,
       foot:'Dashboard: <a href="https://app.netlify.com">app.netlify.com</a>',
       groups:nlGroups,
-      row:(g,[site,name,desc])=>{
+      row:(g,[site,name,desc,icon])=>{
         const url=`https://${site}.netlify.app/`;
-        return `<li class="row" data-s="${esc((name+" "+site+" "+desc).toLowerCase())}"><a class="main" href="${url}" target="_blank" rel="noopener"><span class="name">${esc(name)}${desc?`<span class="desc">${esc(desc)}</span>`:""}<span class="slug">${esc(site)}.netlify.app</span></span><span class="arrow">↗</span></a><a class="code" href="https://app.netlify.com/projects/${site}" target="_blank" rel="noopener">admin</a></li>`;
+        return `<li class="row" data-s="${esc((name+" "+site+" "+desc).toLowerCase())}"><a class="main" href="${url}" target="_blank" rel="noopener">${ICON(icon,"",name,g.color)}<span class="name">${esc(name)}${desc?`<span class="desc">${esc(desc)}</span>`:""}<span class="slug">${esc(site)}.netlify.app</span></span><span class="arrow">↗</span></a><a class="code" href="https://app.netlify.com/projects/${site}" target="_blank" rel="noopener">admin</a></li>`;
       }},
   github:{sub:"Every GitHub repo with a live GitHub Pages site, one per line.",
       stats:`<div class="pill"><b>${ghCount}</b> Live sites</div><div class="pill">markplaga.github.io</div>`,
       foot:'Profile: <a href="https://github.com/markplaga">github.com/markplaga</a>',
       groups:ghGroups,
-      row:(g,[repo,name,desc])=>{
+      row:(g,[repo,name,desc,icon])=>{
         const url=`https://markplaga.github.io/${repo}/`;
-        return `<li class="row" data-s="${esc((name+" "+repo+" "+desc).toLowerCase())}"><a class="main" href="${url}" target="_blank" rel="noopener"><span class="name">${esc(name)}${desc?`<span class="desc">${esc(desc)}</span>`:""}<span class="slug">markplaga.github.io/${esc(repo)}</span></span><span class="arrow">↗</span></a><a class="code" href="https://github.com/markplaga/${repo}" target="_blank" rel="noopener">code</a></li>`;
+        return `<li class="row" data-s="${esc((name+" "+repo+" "+desc).toLowerCase())}"><a class="main" href="${url}" target="_blank" rel="noopener">${ICON(icon,"",name,g.color)}<span class="name">${esc(name)}${desc?`<span class="desc">${esc(desc)}</span>`:""}<span class="slug">markplaga.github.io/${esc(repo)}</span></span><span class="arrow">↗</span></a><a class="code" href="https://github.com/markplaga/${repo}" target="_blank" rel="noopener">code</a></li>`;
       }}
 };
 let current="hf";

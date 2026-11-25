@@ -1,5 +1,5 @@
 // Mark's Awesome Stuff — offline support. Bump VERSION to refresh the cache.
-const VERSION = 'v1';
+const VERSION = 'v2';
 const CACHE = 'awesome-stuff-' + VERSION;
 const SHELL = ['./', './index.html', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
